@@ -1,0 +1,26 @@
+
+UNIT_TO_SAMPLE = {
+    unit: sample for sample, units in config["samples"].items()
+    for unit in units}
+
+rule fastq_dump_interleaved:
+    input:
+        lambda wildcards: config["units"][wildcards.unit]
+    output:
+        "out/fastq/{sample}_{unit}.fastq.gz"
+    params:
+        sample=lambda wildcards: UNIT_TO_SAMPLE[wildcards.unit],
+    log:
+        "logs/fastq-dump/{sample}_{unit}.log"
+    threads: 1
+    shell:
+        "fastq-dump "
+	"--split-spot "
+	"--skip-technical "
+	"--stdout "
+	"--readids "
+        "--defline-seq '@$sn/$ri' "
+        "--defline-qual '+' "
+        "{input}  2> {log} "
+        "| gzip -9 > {output}"
+
