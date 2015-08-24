@@ -50,7 +50,7 @@ rule bwa_mem:
         lambda wildcards: config["references"][wildcards.reference],
         lambda wildcards: config["units"][wildcards.unit]
     output:
-        "out/mapping/units/{unit}_{reference}.bam"
+        "out/mapping/units/{sample}_{unit}_{reference}.bam"
     params:
         sample=lambda wildcards: UNIT_TO_SAMPLE[wildcards.unit],
 	platform=config.get("platform", "Illumina"),
@@ -65,12 +65,13 @@ rule bwa_mem:
         "-t {threads} {input}  2> {log} "
         "| samtools view -Sbh - > {output}"
 
+
 rule extract_unmapped:
     input:
         lambda wildcards: config["references"][wildcards.reference],
         lambda wildcards: config["units"][wildcards.unit]
     output:
-        "out/reads/unmapped/{unit}_{reference}.fastq.gz"
+        "out/reads/unmapped/{sample}_{unit}_{reference}.fastq.gz"
     params:
         custom=config.get("params_bwa_mem", "")
     log:
