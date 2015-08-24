@@ -71,7 +71,7 @@ rule extract_unmapped:
         lambda wildcards: config["references"][wildcards.reference],
         lambda wildcards: config["units"][wildcards.unit]
     output:
-        "out/fastq/{sample}_{unit}_{reference}.fastq.gz"
+        "out/fastq/{sample}_{unit}_unmapped_{reference}.fastq.gz"
     params:
         custom=config.get("params_bwa_mem", "")
     log:
