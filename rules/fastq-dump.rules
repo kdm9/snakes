@@ -7,7 +7,7 @@ rule fastq_dump_interleaved:
     input:
         lambda wildcards: config["units"][wildcards.unit]
     output:
-        "out/fastq/{sample}_{unit}.fastq.gz"
+        "out/fastq/{sample}_{unit}_IL.fastq.gz"
     params:
         sample=lambda wildcards: UNIT_TO_SAMPLE[wildcards.unit],
     log:
